@@ -36,6 +36,19 @@ function init() {
 
         scene.add(character);
         camera.lookAt(0, 0, 0); // Make sure the camera is pointing at the center of the scene
+
+        // Get color picker elements
+        const hairColorPicker = document.getElementById('hairColorPicker');
+        const skinColorPicker = document.getElementById('skinColorPicker');
+
+        // Add event listeners to color pickers
+        hairColorPicker.addEventListener('input', function() {
+            setColor(character, 'Hair', hairColorPicker.value);
+            setColor(character, 'Hair2', hairColorPicker.value);
+        });
+        skinColorPicker.addEventListener('input', function() {
+            setColor(character, 'Character_Mesh', skinColorPicker.value);
+        });
     }, undefined, function(error) {
         console.error(error);
     });
@@ -52,4 +65,13 @@ function onWindowResize() {
 function animate() {
     requestAnimationFrame(animate);
     renderer.render(scene, camera);
+}
+
+// Function to change color of a named object in the model
+function setColor(obj, name, color) {
+    obj.traverse(function(child) {
+        if (child.name === name) {
+            child.material.color = new THREE.Color(color);
+        }
+    });
 }
