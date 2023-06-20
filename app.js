@@ -29,13 +29,7 @@ function init() {
     const loader = new GLTFLoader();
     loader.load('./waitress.gltf', function(gltf) {
         character = gltf.scene;
-        character.traverse(function(node) {
-            if (node.isMesh) {
-                node.geometry.center(); // Center the character
-            }
-        });
         scene.add(character);
-
         camera.lookAt(character.position); // Make sure the camera is pointing at the character
     }, undefined, function(error) {
         console.error(error);
@@ -54,14 +48,3 @@ function animate() {
     requestAnimationFrame(animate);
     renderer.render(scene, camera);
 }
-
-// Change hair color function (replace 'hairMaterialName' with the correct material name for the hair)
-function changeHairColor(color) {
-    character.traverse(function(node) {
-        if (node.isMesh && node.material.name === 'hair') {
-            node.material.color.set(color);
-        }
-    });
-}
-
-changeHairColor('red');
