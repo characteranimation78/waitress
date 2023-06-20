@@ -15,6 +15,7 @@ function init() {
     renderer = new THREE.WebGLRenderer({antialias: true});
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(window.devicePixelRatio); // This will make the output better on high-resolution screens
+    renderer.setClearColor(0xd2b48c);
     document.body.appendChild(renderer.domElement);
 
     const loader = new GLTFLoader();
