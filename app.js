@@ -14,9 +14,9 @@ function init() {
     scene.add(ambientLight);
 
     // Add directional light
-    var directionalLight = new THREE.DirectionalLight(0xffffff);
-    directionalLight.position.set(0, 1, 1).normalize();
-    scene.add(directionalLight);
+    // var directionalLight = new THREE.DirectionalLight(0xffffff);
+    // directionalLight.position.set(0, 1, 1).normalize();
+    // scene.add(directionalLight);
 
     camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     camera.position.z = 5;
@@ -29,7 +29,13 @@ function init() {
     const loader = new GLTFLoader();
     loader.load('./waitress.gltf', function(gltf) {
         character = gltf.scene;
+        character.traverse(function(node) {
+            if (node.isMesh) {
+                node.geometry.center(); // Center the character
+            }
+        });
         scene.add(character);
+
         camera.lookAt(character.position); // Make sure the camera is pointing at the character
     }, undefined, function(error) {
         console.error(error);
