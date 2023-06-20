@@ -9,14 +9,11 @@ animate();
 function init() {
     scene = new THREE.Scene();
 
-    // Add ambient light
-    var ambientLight = new THREE.AmbientLight(0xC4A484);
-    scene.add(ambientLight);
-
     camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     camera.position.z = 5;
 
     renderer = new THREE.WebGLRenderer({antialias: true});
+    renderer.setClearColor(0xd2b48c); // Light brown color
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(window.devicePixelRatio); // This will make the output better on high-resolution screens
     document.body.appendChild(renderer.domElement);
@@ -41,9 +38,6 @@ function init() {
         const hairColorPicker = document.getElementById('hairColorPicker');
         const skinColorPicker = document.getElementById('skinColorPicker');
 
-        skinColorPicker.addEventListener('input', function() {
-            setColor(character, 'Character_Mesh', skinColorPicker.value);
-        });
         // Add event listeners to color pickers
         hairColorPicker.addEventListener('input', function() {
             setColor(character, 'Hair', hairColorPicker.value);
