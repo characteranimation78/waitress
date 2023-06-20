@@ -15,7 +15,6 @@ function init() {
     renderer = new THREE.WebGLRenderer({antialias: true});
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(window.devicePixelRatio); // This will make the output better on high-resolution screens
-    renderer.setClearColor(0xd2b48c);
     document.body.appendChild(renderer.domElement);
 
     const loader = new GLTFLoader();
@@ -42,6 +41,9 @@ function init() {
         hairColorPicker.addEventListener('input', function() {
             setColor(character, 'Hair', hairColorPicker.value);
             setColor(character, 'Hair2', hairColorPicker.value);
+        });
+        skinColorPicker.addEventListener('input', function() {
+            setColor(character, 'Character_Mesh', skinColorPicker.value);
         });
     }, undefined, function(error) {
         console.error(error);
