@@ -8,6 +8,10 @@ animate();
 
 function init() {
     scene = new THREE.Scene();
+    
+    // Add ambient light
+    var ambientLight = new THREE.AmbientLight(0xcccccc);
+    scene.add(ambientLight);
 
     camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     camera.position.z = 5;
