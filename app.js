@@ -13,11 +13,6 @@ function init() {
     var ambientLight = new THREE.AmbientLight(0xcccccc);
     scene.add(ambientLight);
 
-    // Add directional light
-    // var directionalLight = new THREE.DirectionalLight(0xffffff);
-    // directionalLight.position.set(0, 1, 1).normalize();
-    // scene.add(directionalLight);
-
     camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     camera.position.z = 5;
 
@@ -29,14 +24,18 @@ function init() {
     const loader = new GLTFLoader();
     loader.load('./waitress.gltf', function(gltf) {
         character = gltf.scene;
-        character.traverse(function(node) {
-            if (node.isMesh) {
-                node.geometry.center(); // Center the character
-            }
-        });
-        scene.add(character);
 
-        camera.lookAt(character.position); // Make sure the camera is pointing at the character
+        // Calculate the bounding box of the whole model
+        const box = new THREE.Box3().setFromObject(character);
+
+        // Get the center of the bounding box
+        const center = box.getCenter(new THREE.Vector3());
+
+        // Move the whole model so that its center is at the origin
+        character.position.sub(center);
+
+        scene.add(character);
+        camera.lookAt(0, 0, 0); // Make sure the camera is pointing at the center of the scene
     }, undefined, function(error) {
         console.error(error);
     });
