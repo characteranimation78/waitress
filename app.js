@@ -1,41 +1,45 @@
 import * as THREE from 'https://threejs.org/build/three.module.js';
 import { GLTFLoader } from './GLTFLoader.js';
 
-var scene, camera, renderer;
+var scene, camera, renderer, character;
 
 init();
 animate();
 
 function init() {
     scene = new THREE.Scene();
-	
-	// Add ambient light
-	var ambientLight = new THREE.AmbientLight(0xcccccc);
-	scene.add(ambientLight);
 
-	// Add directional light
-	var directionalLight = new THREE.DirectionalLight(0xffffff);
-	directionalLight.position.set(0, 1, 1).normalize();
+    // Add ambient light
+    var ambientLight = new THREE.AmbientLight(0xcccccc);
+    scene.add(ambientLight);
 
-	scene.add(directionalLight);
+    // Add directional light
+    var directionalLight = new THREE.DirectionalLight(0xffffff);
+    directionalLight.position.set(0, 1, 1).normalize();
+    scene.add(directionalLight);
 
     camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    camera.position.set(0, 0, 0);
     camera.position.z = 5;
 
-    renderer = new THREE.WebGLRenderer();
+    renderer = new THREE.WebGLRenderer({antialias: true});
     renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(window.devicePixelRatio); // This will make the output better on high-resolution screens
     document.body.appendChild(renderer.domElement);
 
     const loader = new GLTFLoader();
     loader.load('./waitress.gltf', function(gltf) {
-        scene.add(gltf.scene);
+        character = gltf.scene;
+        character.traverse(function(node) {
+            if (node.isMesh) {
+                node.geometry.center(); // Center the character
+            }
+        });
+        scene.add(character);
+
+        camera.lookAt(character.position); // Make sure the camera is pointing at the character
     }, undefined, function(error) {
         console.error(error);
     });
-
-    var light = new THREE.AmbientLight(0x404040); // soft white light
-    scene.add(light);
 
     window.addEventListener('resize', onWindowResize, false);
 }
@@ -50,3 +54,14 @@ function animate() {
     requestAnimationFrame(animate);
     renderer.render(scene, camera);
 }
+
+// Change hair color function (replace 'hairMaterialName' with the correct material name for the hair)
+function changeHairColor(color) {
+    character.traverse(function(node) {
+        if (node.isMesh && node.material.name === 'hair') {
+            node.material.color.set(color);
+        }
+    });
+}
+
+changeHairColor('red');
